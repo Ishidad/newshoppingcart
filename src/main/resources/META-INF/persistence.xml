@@ -11,15 +11,13 @@
     <class>com.globant.carrito.cart.Carts</class>
     <class>com.globant.carrito.product.Product</class>
     <properties>
-      <!-- Esto genera/actualiza las tablas -->
       <property name="hibernate.hbm2ddl.auto" value="update" />
-      <!-- Esto sirve si quieren ver en el log el SQL que se genera -->
       <property name="hibernate.show_sql" value="true" />
        
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-      <property name="hibernate.connection.password" value="admin" />
-      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/shoppcart" />
-      <property name="hibernate.connection.username" value="admin" />
+      <property name="hibernate.connection.password" value="1234" />
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost/javashopdb" />
+      <property name="hibernate.connection.username" value="root" />
       <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
     </properties>
   </persistence-unit>

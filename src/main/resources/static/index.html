@@ -40,19 +40,11 @@
 				);
 		}
 		function newClient() {
-			var mailistValue = false;
-			if ($("#mailist").is(":checked")){
-			  mailistValue = true;
-			}
 			post('service/newClient',
 				{
-					"name": $("#name").val(),
-					"username": $("#username").val(),
-					"password": $("#password").val(),
-					"shippingAddress": $("#shippingAddress").val(),
-					"telephone": $("#telephone").val(),
+					"username": $("#newusername").val(),
+					"password": $("#newpassword").val(),
 					"email": $("#email").val(),
-					"mailist": mailistValue
 				},
 				function(data) {
 						if (data.status) {
@@ -82,7 +74,7 @@
 			});
 		}
 		function checkout() {
-			if (confirm("Va a enviar el carrito. ¿Está seguro?")) {
+			if (confirm("Checkout... Do you want to preceed?")) {
 				get('service/checkout',
 				function(data) {
 					if (data.status) {
@@ -161,7 +153,7 @@
 				<input type="password" id="password" value="" />
 			</div>
 			<input type="button" id="login" value="Login" onclick="login();" />
-			<input type="button" id="newClient" value="New Client? Sign Up!" onclick="goToNewClient();">
+			<input type="button" id="newClient" value="Register" onclick="goToNewClient();">
 		</div>
 		<div data-role="footer">
 			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>
@@ -174,22 +166,14 @@
 		</div>
 		<div data-role="main" class="ui-content">
 			<div class="ui-field-contain">
-				<label for="name">Name:</label>
-				<input type="text" id="name" value="" />
 				<label for="username">Username:</label>
-				<input type="text" id="username" value="" />
+				<input type="text" id="newusername"/>
 				<label for="password">Password:</label>
-				<input type="password" id="password" value="" />
-				<label for="shippingAddress">Shipping address:</label>
-				<input type="text" id="shippingAddress" value="" />
-				<label for="telephone">Telephone:</label>
-				<input type="text" id="telephone" value="" />
+				<input type="password" id="newpassword"/>
 				<label for="email">E-mail:</label>
-				<input type="email" id="email" value="" />
-				<label for="mailist">Subscribe to E-mail List</label>
-				<input type="checkbox" id="mailist" value="" />
+				<input type="text" id="email"/>
 			</div>
-			<input type="button" id="createClient" value="Create" onclick="newClient();" />
+			<input type="button" id="createClient" value="Register" onclick="newClient();" />
 		</div>
 		<div data-role="footer">
 			<h4>(c) 2015 Los Borbotones Software Company Inc.</h4>

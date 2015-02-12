@@ -2,55 +2,43 @@ package com.globant.carrito.cart;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import com.globant.carrito.client.Clients;
+import com.globant.carrito.clients.Clients;
 import com.globant.carrito.product.Items;
 
 
 @Entity
 public class Carts {
 	
-	// ATTRIBUTES
-	
 	@Id
 	@GeneratedValue
 	private int cartId;
 	
+	// One User may have many carts because, every checked out cart is related
+	// to that user for purchases follow up
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Clients client;
 	
+	//Set a collection of item that will be in the shopping cart
 	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Items> items;
 	
+	//Set a final price to track how much a person spend on a checked out cart
+	//Ideally this should be in another class that manages the recipes of the purchases
 	@Column
-	private Date date;
+	private double cartFinalPrice;
 	
-	@Column
-	private double cartPrice;
-	
-	@Column
-	@GeneratedValue
-	private int transactionNumber;
-	
-	@Column
-	@Enumerated(EnumType.STRING)
-	private PaymentTypes paymentType;
-	
+	//This is the cart status, if true, cart is in use, if false, cart was checked out
 	@Column
 	private boolean status;
-	
-	// CONSTRUCTORS
 	
 	public Carts(){
 		
@@ -69,57 +57,34 @@ public class Carts {
 		}
 	}
 	
-	// ADITIONAL METHODS
-	/**
-	 * Method called from ItemsService to add items to client´s cart
-	 * @param item
-	 */
+
+	//This method add items to clients cart, also used to load the item FK
 	public void addItem(Items item) {
 		items.add(item);
-		// Esto es necesario para que cargue la "clave foranea" (Lautaro)
 		item.setCart(this);
 	}
 	
-	/**
-	 * Method called from ItemsService to remove items from client´s cart when item quantity is equals to 0
-	 * @param item
-	 */
+	//This method removes items from the cart
 	public void removeItem(Items item) {
 		items.remove(item);
 		item.setCart(this);
 	}
 
-	// GETTERS
-	
 	public Set<Items> getItems() {
 		return items;
 	}
 
-	public Date getDate() {
-		return date;
-	}
-
 	public double getCartPrice() {
-		return cartPrice;
-	}
-
-	public PaymentTypes getPaymentType() {
-		return paymentType;
+		return cartFinalPrice;
 	}
 
 	public int getCartId() {
 		return cartId;
 	}
 
-	public int getTransactionNumber() {
-		return transactionNumber;
-	}
-
 	public boolean isStatus() {
 		return status;
 	}
-	
-	// SETTERS
 	
 	public void setStatus(boolean status) {
 		this.status = status;

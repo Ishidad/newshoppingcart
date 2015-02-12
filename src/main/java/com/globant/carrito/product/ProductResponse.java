@@ -1,7 +1,3 @@
-/**
- *  CLASS USED AS AN EXAMPLE
- */
-
 package com.globant.carrito.product;
 
 import java.util.ArrayList;

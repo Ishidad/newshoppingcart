@@ -8,8 +8,6 @@ import javax.persistence.Id;
 @Entity
 public class Product {
 	
-	// ATTRIBUTES
-	
 	@Id
 	@GeneratedValue
 	private int id;
@@ -19,8 +17,6 @@ public class Product {
 	
 	@Column
 	private double price;
-	
-	// GETTERS
 	
 	public int getId() {
 		return id;

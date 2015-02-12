@@ -12,16 +12,18 @@ import com.globant.carrito.cart.Carts;
 @Entity
 public class Items {
 	
-	// ATTRIBUTES
 	@Id
 	@GeneratedValue
-	private int itemId;
+	private int id;
 	
 	@Column
 	private double price;
 	
+	//This is not intended to work as a fully stock service
+	//It just to verify if is a quantity of that item
+	//The stock should be in another class
 	@Column
-	private int qty;
+	private int stock;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Carts cart;
@@ -29,7 +31,6 @@ public class Items {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Product product;
 
-	// CONSTRUCTORS
 	public Items() {
 		
 	}
@@ -37,20 +38,19 @@ public class Items {
 	public Items(double price, Product product, int qty) {
 		this.price = price;
 		this.product = product;
-		this.qty = qty;
+		this.stock = qty;
 	}
 
-	// GETTERS
 	public int getItemId() {
-		return itemId;
+		return id;
 	}
 	
 	public double getPrice() {
 		return price;
 	}
 
-	public int getQty() {
-		return qty;
+	public int getStock() {
+		return stock;
 	}
 
 	public Carts getCart() {
@@ -61,20 +61,11 @@ public class Items {
 		return product;
 	}
 
-	// SETTERS
-	/**
-	 * Setter for updating quantity when adding/removing Items to cart. Called from ItemsService
-	 * @param qty
-	 * 
-	 */
-	public void setQty(int qty) {
-		this.qty = qty;
+	//Updates quantity when adding or removing Items from the cart
+	public void setStock(int qty) {
+		this.stock = qty;
 	}
 
-	/**
-	 * Setter for assigning a new cart. Called from Carts 
-	 * @param cart
-	 */
 	public void setCart(Carts cart) {
 		this.cart = cart;
 	}

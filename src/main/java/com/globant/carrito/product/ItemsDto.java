@@ -3,28 +3,32 @@ package com.globant.carrito.product;
 public class ItemsDto {
 
 	private int quantity;
-	private String productName;
-	private double amount;
-	private int productId;
-	public ItemsDto(int quantity, String productName, double amount,
+	private String description;
+	private double price;
+	private int id;
+	
+	public ItemsDto(int quantity, String productDesc, double price,
 			int productId) {
-		super();
 		this.quantity = quantity;
-		this.productName = productName;
-		this.amount = amount;
-		this.productId = productId;
+		this.description = productDesc;
+		this.price = price;
+		this.id = productId;
 	}
+	
 	public int getQuantity() {
 		return quantity;
 	}
+	
 	public String getProductName() {
-		return productName;
+		return description;
 	}
+	
 	public double getAmount() {
-		return amount;
+		return price;
 	}
+	
 	public int getProductId() {
-		return productId;
+		return id;
 	}
 	
 

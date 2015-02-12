@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.globant.carrito.StatusDto;
+import com.globant.carrito.LoginStatusDto;
 import com.globant.carrito.cart.Carts;
-import com.globant.carrito.client.Clients;
+import com.globant.carrito.clients.Clients;
 import com.globant.carrito.security.SecurityService;
 
 @RestController
@@ -27,7 +27,7 @@ public class ItemsService {
 	
 	@RequestMapping(value = "/service/newItem/{prodId}", method = RequestMethod.GET)
 	@ResponseBody
-	public StatusDto newItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
+	public LoginStatusDto newItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = null;
 		try {
@@ -39,7 +39,7 @@ public class ItemsService {
 			boolean found = false; // Flag for checking if the item to add already exists in cart.
 			for(Items i : cart.getItems()){
 				if(i.getProduct().getId() == (prodId)){
-					i.setQty(i.getQty()+1);
+					i.setStock(i.getStock()+1);
 					found = true;
 					break;
 				}
@@ -50,13 +50,13 @@ public class ItemsService {
 			}
 			em.persist(cart);
 			tx.commit();
-			return new StatusDto(true);
+			return new LoginStatusDto(true);
 		} catch (RuntimeException e) {
 			if (tx != null && tx.isActive()) {
 				tx.rollback();
 			}
 			e.printStackTrace();
-			return new StatusDto(false);
+			return new LoginStatusDto(false);
 		} finally {
 			em.close();
 		}
@@ -64,7 +64,7 @@ public class ItemsService {
 	
 	@RequestMapping(value = "/service/removeItem/{prodId}", method = RequestMethod.GET)
 	@ResponseBody
-	public StatusDto removeItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
+	public LoginStatusDto removeItem(@PathVariable("prodId") Integer prodId,HttpSession session) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = null;
 		try {
@@ -74,9 +74,9 @@ public class ItemsService {
 			Carts cart = getCart(session, em);
 
 			for(Items i : cart.getItems()){
-				if(i.getProduct().getId() == (prodId) && i.getQty() > 0){
-					i.setQty(i.getQty()-1);
-					if(i.getQty() == 0){ // If the item removed has quantity = 0, then remove it from the client´s cart
+				if(i.getProduct().getId() == (prodId) && i.getStock() > 0){
+					i.setStock(i.getStock()-1);
+					if(i.getStock() == 0){ // If the item removed has quantity = 0, then remove it from the client cart
 						cart.removeItem(i);
 					}
 					break;
@@ -84,13 +84,13 @@ public class ItemsService {
 			}
 			em.persist(cart);
 			tx.commit();
-			return new StatusDto(true);
+			return new LoginStatusDto(true);
 		} catch (RuntimeException e) {
 			if (tx != null && tx.isActive()) {
 				tx.rollback();
 			}
 			e.printStackTrace();
-			return new StatusDto(false);
+			return new LoginStatusDto(false);
 		} finally {
 			em.close();
 		}
@@ -103,7 +103,7 @@ public class ItemsService {
 		Carts c = getCart(session, em);
 		ItemsResponse resp = new ItemsResponse();
 		for(Items i : c.getItems()){
-			resp.getResults().add(new ItemsDto(i.getQty(), i.getProduct().getName(), i.getPrice(), i.getProduct().getId()));
+			resp.getResults().add(new ItemsDto(i.getStock(), i.getProduct().getName(), i.getPrice(), i.getProduct().getId()));
 		}
 		em.close();
 		return resp;
@@ -113,12 +113,8 @@ public class ItemsService {
 		return (String)session.getAttribute(SecurityService.USERNAME);
 	}
 	
-	/**
-	 * 
-	 * @param session
-	 * @param em
-	 * @return The cart assigned to the Client. If not found, it creates a new one.
-	 */
+	//Returns the last cart assigned to a Client. 
+	//If not found, it creates a new one and is assigned to the Client.
 	private Carts getCart(HttpSession session, EntityManager em) {
 		try {
 			TypedQuery<Carts> query = em.createQuery("select c from Carts c where c.client.username = :username and c.status = true", Carts.class);
@@ -133,7 +129,7 @@ public class ItemsService {
 	
 	@RequestMapping(value = "/service/checkout", method = RequestMethod.GET)
 	@ResponseBody
-	public StatusDto checkOut(HttpSession session) {
+	public LoginStatusDto checkOut(HttpSession session) {
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction tx = null;
 		
@@ -145,13 +141,13 @@ public class ItemsService {
 			cart.setStatus(false);
 			em.persist(cart);
 			tx.commit();
-			return new StatusDto(true);
+			return new LoginStatusDto(true);
 		} catch (RuntimeException e) {
 			if (tx != null && tx.isActive()) {
 				tx.rollback();
 			}
 			e.printStackTrace();
-			return new StatusDto(false);
+			return new LoginStatusDto(false);
 		} finally {
 			em.close();
 		}

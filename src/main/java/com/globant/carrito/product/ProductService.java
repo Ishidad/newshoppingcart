@@ -1,7 +1,3 @@
-/**
- *  CLASS USED AS AN EXAMPLE
- */
-
 package com.globant.carrito.product;
 
 import javax.persistence.EntityManager;
@@ -20,6 +16,8 @@ public class ProductService {
 	EntityManagerFactory emf = Persistence
 			.createEntityManagerFactory("db");
 	
+	//Products are items that can be bought outside the shopping cart
+	//This method shows a list of items available to sell
 	@RequestMapping(value = "/service/getProducts", method = RequestMethod.GET)
 	@ResponseBody
 	public ProductResponse getProducts() {

@@ -1,9 +1,9 @@
 package com.globant.carrito;
 
-public class StatusDto {
+public class LoginStatusDto {
 	private boolean status;
 
-	public StatusDto(boolean status) {
+	public LoginStatusDto(boolean status) {
 		this.status = status;
 	}
 

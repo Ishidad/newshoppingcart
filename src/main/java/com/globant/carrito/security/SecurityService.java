@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.globant.carrito.StatusDto;
-import com.globant.carrito.client.Clients;
+import com.globant.carrito.LoginStatusDto;
+import com.globant.carrito.clients.Clients;
 
 @RestController
 public class SecurityService {
@@ -22,7 +22,7 @@ public class SecurityService {
 
 	@RequestMapping(value = "/service/login", method=RequestMethod.POST)
 	@ResponseBody
-	public StatusDto login(@RequestBody LoginDto dto,HttpSession session) {
+	public LoginStatusDto login(@RequestBody LoginDto dto,HttpSession session) {
 	
 		EntityManagerFactory emf = Persistence
 				.createEntityManagerFactory("db");
@@ -39,9 +39,9 @@ public class SecurityService {
 		        if (isValid) {
 		        	session.setAttribute(USERNAME, username);
 		        }
-		        return new StatusDto(isValid);
+		        return new LoginStatusDto(isValid);
 		} catch (NoResultException e) {
-			return new StatusDto(false);
+			return new LoginStatusDto(false);
 		} finally {
 			em.close();
 		}
